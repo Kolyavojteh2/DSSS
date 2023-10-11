@@ -102,7 +102,7 @@ void TCPServer::bootstrapHandler(void *inputData)
     std::cout << QDateTime::currentDateTime().toString(Qt::DateFormat::ISODate).toStdString() << "[bootstrap]: ";
 
     // Print MAC
-    std::cout << "MAC=" << convertMACtoString(nodeMAC);
+    std::cout << "MAC = " << convertMACtoString(nodeMAC) << ". ";
     // Add MAC into the set
     tcpServer.addClientMAC(std::move(nodeMAC));
 
@@ -111,7 +111,7 @@ void TCPServer::bootstrapHandler(void *inputData)
     std::array<uint8_t, MAC_ADDRESS_LENGTH> rootMAC;
     std::copy(packet->rootMAC.begin(), packet->rootMAC.end(), rootMAC.begin());
 
-    std::cout << "rootMAC=" << convertMACtoString(rootMAC) << std::endl;
+    std::cout << "rootMAC = " << convertMACtoString(rootMAC) << std::endl;
 }
 
 std::string TCPServer::convertMACtoString(std::array<uint8_t, MAC_ADDRESS_LENGTH> mac)
