@@ -90,17 +90,13 @@ void TCPServer::bootstrapHandler(void *inputData)
     std::vector<uint8_t> &bin = *input->bin;
     TCPServer &tcpServer = *input->server;
 
-
     DSS_Protocol_t bootstrap(bin);
     if (bootstrap.type != PacketType_t::BootstrapPacket)
         return;
 
     // get MAC
     std::array<uint8_t, MAC_ADDRESS_LENGTH> nodeMAC;
-    for (unsigned int i = 0; i < bootstrap.sourceMAC.size(); ++i)
-    {
-        nodeMAC[i] = ((uint8_t)bootstrap.sourceMAC[i]);
-    }
+    std::copy(bootstrap.sourceMAC.begin(), bootstrap.sourceMAC.end(), nodeMAC.begin());
 
     // Print DateTime and bootstrap tag
     std::cout << QDateTime::currentDateTime().toString(Qt::DateFormat::ISODate).toStdString() << "[bootstrap]: ";
@@ -181,10 +177,7 @@ int TCPServer::comunicateWithRoot()
 
     QByteArray byteArray = clientSocket->readAll();
     std::vector<uint8_t> bin;
-    for (unsigned int i = 0; i < byteArray.size(); ++i)
-    {
-        bin.push_back((uint8_t)byteArray[i]);
-    }
+    std::copy(byteArray.begin(), byteArray.end(), std::back_insert_iterator(bin));
 
     binaryPacketWithTcpServer_t data;
     data.server = this;
